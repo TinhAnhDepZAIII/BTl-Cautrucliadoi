@@ -3,11 +3,11 @@
 #include <cstring>  
 #include <stack>
 using namespace std;
-struct Node
+struct Node2
 {
     string data;
-    Node *pLeft;
-    Node *pRight;  
+    Node2 *pLeft;
+    Node2 *pRight;  
 };
 bool ComparisionString1AndString2( string a, string b){
     int charA = ((a == "->")? 1 : ((a == "<->") ? 2 : (a == "|" ? 3 : (a == "&" ? 3 : 4))));
@@ -17,10 +17,10 @@ bool ComparisionString1AndString2( string a, string b){
     }
     return false;
 }
-typedef Node *Tree;
+typedef Node2 *Tree;
 Tree MakeNewNode (string x)
 {
-    Tree p = new Node;
+    Tree p = new Node2;
     p->data = x;
     p->pLeft = p->pRight = NULL;
     return p;

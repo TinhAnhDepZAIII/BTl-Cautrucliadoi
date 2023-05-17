@@ -5,13 +5,13 @@
 
 
 using namespace std;
-struct Node 
+struct Node2
 {
     string data;
-    Node *pLeft;
-    Node *pRight;
+    Node2 *pLeft;
+    Node2 *pRight;
 };
-bool ComparisonChar1AndChar2( char a, char b){
+bool ComparisonChar1AndChar2Ver2( char a, char b){
     int charA = ((a == '+' || a == '-') ? 1 : ((a == '*' || a == '/') ? 2 : 3));
     int charB = ((b == '+' || b == '-') ? 1 : ((b == '*' || b == '/') ? 2 : 3));
     if( charA <= charB){
@@ -20,17 +20,17 @@ bool ComparisonChar1AndChar2( char a, char b){
     return false;
 }
 
-typedef Node *Tree;
-Tree MakeNewNode (char x)
+typedef Node2 *Tree;
+Tree MakeNewNode2 (char x)
 {
-    Tree p = new Node;
+    Tree p = new Node2;
     p->data = x;
     p->pLeft = p->pRight = NULL;
     return p;
 }
-Tree MakeNewNodeString (string x)
+Tree MakeNewNode2String (string x)
 {
-    Tree p = new Node;
+    Tree p = new Node2;
     p->data = x;
     p->pLeft = p->pRight = NULL;
     return p;
@@ -39,7 +39,6 @@ string Infix2Prefix (string s){
     
     stack<Tree> StackNode;
     stack<char> StackOperator;
-
     stack<Tree> StackPrint;
     
     string use = s;
@@ -55,13 +54,18 @@ string Infix2Prefix (string s){
                 StackOperator.push(use[i]);
             }
             else if (use[i] == ')')
-            {  // specia; open bracklet operator
+            {  // special open bracklet operator
                 while(StackOperator.top() != '('){
-                    Tree t = MakeNewNode(StackOperator.top());
+                    Tree t = MakeNewNode2(StackOperator.top());
                     t->pRight = StackNode.top();
                     StackNode.pop();
+                    if ( StackNode.empty()) throw "Error: Syntax error";
                     t->pLeft = StackNode.top();
                     StackNode.pop();
+
+                    if ( t->data == "/" && t->pRight->data == "0") throw "Error: Divide by zero";
+                    if ( t->data == "^" && t->pRight->data == "0" && t->pLeft->data == "0") throw "Error: Undefined error";
+
                     StackNode.push(t);
                     StackOperator.pop();
                 }
@@ -74,22 +78,42 @@ string Infix2Prefix (string s){
                     if ( !isdigit(use[i+1])){break;}
                     i++;
                 }
-                Tree tmp = MakeNewNodeString(temper);
+                Tree tmp = MakeNewNode2String(temper);
                 StackNode.push(tmp);
             }
             else
             {
-                while ( ComparisonChar1AndChar2(use[i], StackOperator.top()) && StackOperator.top() != '('){
-                    Tree tmp = MakeNewNode(StackOperator.top());
-                    tmp->pRight = StackNode.top(); StackNode.pop();
-                    tmp->pLeft = StackNode.top(); StackNode.pop();
-                    StackNode.push(tmp);
-                    StackOperator.pop();
+                if ( use[i] == '.') throw "Error: Syntax Error";
+                bool check = false;
+                while ( ComparisonChar1AndChar2Ver2(use[i], StackOperator.top()) && StackOperator.top() != '('){
+                    Tree tmp = MakeNewNode2(StackOperator.top());
+
+                    if ( !isdigit(StackOperator.top()) && StackNode.size() <2){
+                        if ( (StackOperator.top() != '+' && StackOperator.top() != '-')  && (tmp->data != "+" && tmp->data != "-")){
+                            throw "Undefined error";
+                        }else 
+                        {
+                            char temp = StackOperator.top();
+                            StackOperator.pop();
+                            StackOperator.push((temp == use[i] ? '+' : '-'));
+                        }   
+                        check = true;   
+                        break;
+                    }
+                    else {
+                        tmp->pRight = StackNode.top(); StackNode.pop();
+                        tmp->pLeft = StackNode.top(); StackNode.pop();
+                        if ( tmp->data == "/" && tmp->pRight->data == "0") throw "Error: Divide by zero";
+                        if ( tmp->data == "^" && tmp->pRight->data == "0" && tmp->pLeft->data == "0") throw "Error: Undefined error";
+                        StackNode.push(tmp);
+                        StackOperator.pop();
+                    }
                 }
-                StackOperator.push(use[i]);
-            }       
+                if ( !check) StackOperator.push(use[i]);         
+            }
         }
     }
+    if (StackNode.size() != 1 && !isdigit(StackNode.top()->data[0])) throw "Syntax Error";
 
     // tree to prefix
     string res ="";
@@ -107,8 +131,8 @@ string Infix2Prefix (string s){
         }
     }
     if (res.back() == ' ') {
-    res.pop_back();
-}
+        res.pop_back();
+    }
     return res;
 
 }

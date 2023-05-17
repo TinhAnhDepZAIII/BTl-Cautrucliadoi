@@ -4,15 +4,15 @@
 #include <sstream>
 
 using namespace std;
-struct Node {
+struct Node2 {
     string data;
-    Node* parent;
-    Node* left;
-    Node* right;
+    Node2* parent;
+    Node2* left;
+    Node2* right;
 };
 
-Node* createNode(string s){
-    Node* newNode = new Node;
+Node2* createNode(string s){
+    Node2* newNode = new Node2;
     newNode->data = s;
     newNode->left = newNode->right = nullptr;
     return newNode;
@@ -55,12 +55,12 @@ bool removeOuterParenthesis(string& str){
     return false;
 }
 
-Node* buildNumericTree(string infix){
+Node2* buildNumericTree(string infix){
     infix = infix.substr(1,infix.length());
     infix = infix.substr(0, infix.length()-1);
     stack<char> paren;
     while(removeOuterParenthesis(infix)){};
-    Node* root = new Node;
+    Node2* root = new Node2;
     if(isNumber(infix)){
         root->data = infix;
         root->left = root->right = nullptr;
@@ -122,7 +122,7 @@ Node* buildNumericTree(string infix){
     return root;
 }
 
-void deleteTree(Node* root) {
+void deleteTree(Node2* root) {
     if (root == nullptr) {
         return;
     }
@@ -132,10 +132,10 @@ void deleteTree(Node* root) {
 }
 
 string Infix2Postfix(string infix){
-    Node* root = buildNumericTree(infix);
-    Node* temp;
+    Node2* root = buildNumericTree(infix);
+    Node2* temp;
     string postfix;
-    stack<Node*> ns; //ns = node stack;
+    stack<Node2*> ns; //ns = node stack;
     ns.push(root);
     while(!ns.empty()){
         temp = ns.top();

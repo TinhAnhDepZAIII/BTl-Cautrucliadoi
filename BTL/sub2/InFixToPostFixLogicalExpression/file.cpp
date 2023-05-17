@@ -3,11 +3,11 @@
 #include <cstring>  
 #include <stack>
 using namespace std;
-struct Node
+struct Node2
 {
     string data;
-    Node *pLeft;
-    Node *pRight;  
+    Node2 *pLeft;
+    Node2 *pRight;  
 };
 bool ComparisionString1AndString2( string a, string b){
     int charA = ((a == "->")? 1 : ((a == "<->") ? 2 : (a == "|" ? 3 : (a == "&" ? 3 : 4))));
@@ -17,10 +17,10 @@ bool ComparisionString1AndString2( string a, string b){
     }
     return false;
 }
-typedef Node *Tree;
+typedef Node2 *Tree;
 Tree MakeNewNode (string x)
 {
-    Tree p = new Node;
+    Tree p = new Node2;
     p->data = x;
     p->pLeft = p->pRight = NULL;
     return p;
@@ -50,6 +50,7 @@ string LogicInfix2Postfix(string infix){
                     else{
                         t->pRight = StackNode.top();
                         StackNode.pop();
+                        if(StackNode.empty()) throw "Syntax error";
                         t->pLeft = StackNode.top();
                     }
                     StackNode.pop();
@@ -75,21 +76,25 @@ string LogicInfix2Postfix(string infix){
                         Tree t = MakeNewNode(StackOperator.top());
                         if ( t->data == "~"){
                             t->pRight = StackNode.top();
+                            StackNode.pop();
                         }
                         else{
                             t->pRight = StackNode.top();
                             StackNode.pop();
+                            if ( StackNode.empty()) throw "Undefined error";
                             t->pLeft = StackNode.top();
+                            StackNode.pop();
                         }
-                        StackNode.pop();
                         StackNode.push(t);
                         StackOperator.pop();
                     }
                     StackOperator.push(tmp);
             }
         }
+        int tmpp = use.length()-1;
+        if ( StackNode.empty() && !(tmpp != i)) throw "Syntax error";
     }
-    
+    if(StackNode.size() !=1 && !isalpha(StackNode.top()->data[0])) throw "Syntax error";
     string res="";
     Tree temp = StackNode.top();
     while(true){
@@ -112,8 +117,13 @@ string LogicInfix2Postfix(string infix){
     return res; 
 }
 int main (){
-    string file = "~t->t&~w|(z&(p&(w&(p|p&q)|y&z&z)<->x&(~p|z)&~y))";
-    string res = LogicInfix2Postfix(file);
-    cout<<res;
+    try {
+        string file = "a&b";
+        string res = LogicInfix2Postfix(file);
+        cout<<res;
+    }
+    catch(const char* msg) {
+        cerr << msg << endl;
+    }
     return 0;
 }

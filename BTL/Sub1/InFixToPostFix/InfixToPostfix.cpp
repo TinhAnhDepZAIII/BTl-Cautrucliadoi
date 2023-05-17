@@ -5,13 +5,13 @@
 
 
 using namespace std;
-struct Node 
+struct Node2 
 {
     string data;
-    Node *pLeft;
-    Node *pRight;
+    Node2 *pLeft;
+    Node2 *pRight;
 };
-bool ComparisonChar1AndChar2( char a, char b){
+bool ComparisonChar1AndChar2Ver1( char a, char b){
     int charA = ((a == '+' || a == '-') ? 1 : ((a == '*' || a == '/') ? 2 : 3));
     int charB = ((b == '+' || b == '-') ? 1 : ((b == '*' || b == '/') ? 2 : 3));
     if( charA <= charB){
@@ -20,17 +20,17 @@ bool ComparisonChar1AndChar2( char a, char b){
     return false;
 }
 
-typedef Node *Tree;
-Tree MakeNewNode (char x)
+typedef Node2 *Tree;
+Tree MakeNewNode1 (char x)
 {
-    Tree p = new Node;
+    Tree p = new Node2;
     p->data = x;
     p->pLeft = p->pRight = NULL;
     return p;
 }
-Tree MakeNewNodeString (string x)
+Tree MakeNewNode1String (string x)
 {
-    Tree p = new Node;
+    Tree p = new Node2;
     p->data = x;
     p->pLeft = p->pRight = NULL;
     return p;
@@ -38,8 +38,6 @@ Tree MakeNewNodeString (string x)
 string Infix2Postfix (string s){
     
     stack<Tree> StackNode;
-    stack<Tree> StackNodeTemp; // for handling errors testcases.
-
     stack<char> StackOperator;
     stack<Tree> StackPrint;
     
@@ -58,9 +56,10 @@ string Infix2Postfix (string s){
             else if (use[i] == ')')
             {  // special open bracklet operator
                 while(StackOperator.top() != '('){
-                    Tree t = MakeNewNode(StackOperator.top());
+                    Tree t = MakeNewNode1(StackOperator.top());
                     t->pRight = StackNode.top();
                     StackNode.pop();
+                    if ( StackNode.empty()) throw "Error: Syntax error";
                     t->pLeft = StackNode.top();
                     StackNode.pop();
 
@@ -79,24 +78,24 @@ string Infix2Postfix (string s){
                     if ( !isdigit(use[i+1])){break;}
                     i++;
                 }
-                Tree tmp = MakeNewNodeString(temper);
+                Tree tmp = MakeNewNode1String(temper);
                 StackNode.push(tmp);
             }
             else
             {
                 if ( use[i] == '.') throw "Error: Syntax Error";
                 bool check = false;
-                while ( ComparisonChar1AndChar2(use[i], StackOperator.top()) && StackOperator.top() != '('){
-                    Tree tmp = MakeNewNode(StackOperator.top());
+                while ( ComparisonChar1AndChar2Ver1(use[i], StackOperator.top()) && StackOperator.top() != '('){
+                    Tree tmp = MakeNewNode1(StackOperator.top());
 
                     if ( !isdigit(StackOperator.top()) && StackNode.size() <2){
                         if ( (StackOperator.top() != '+' && StackOperator.top() != '-')  && (tmp->data != "+" && tmp->data != "-")){
                             throw "Undefined error";
                         }else 
                         {
-                            char tempp = StackOperator.top();
+                            char temp = StackOperator.top();
                             StackOperator.pop();
-                            StackOperator.push((tmp->data[0] == tempp ? '+' : '-'));
+                            StackOperator.push((temp == use[i] ? '+' : '-'));
                         }   
                         check = true;   
                         break;
@@ -114,7 +113,7 @@ string Infix2Postfix (string s){
             }
         }
     }
-    if (StackOperator.size() != 0) throw "Syntax Error";
+    if (StackNode.size() != 1 && !isdigit(StackNode.top()->data[0])) throw "Syntax Error";
 
     string res = "";
     Tree temp = StackNode.top();
@@ -142,7 +141,7 @@ string Infix2Postfix (string s){
 }
 int main (){
     try {
-    string file = "1++1";
+    string file = "2 4+3";
     string res = Infix2Postfix(file);
     cout<<res;
     }
