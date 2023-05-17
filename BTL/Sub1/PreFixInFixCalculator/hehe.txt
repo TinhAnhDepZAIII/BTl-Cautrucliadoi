@@ -1,0 +1,72 @@
+Dr. Memory version 2.5.0 build 0 built on Oct 18 2021 03:01:22
+Windows version: WinVer=105;Rel=2009;Build=22000;Edition=Professional
+Dr. Memory results for pid 2920: "file.exe"
+Application cmdline: "D:\BachKhoa\HK2\DiscreteStructureforComputerScience\BTL\Sub1\PreFixInFixCalculator\file.exe args to my app"
+Recorded 124 suppression(s) from default D:\\bin64\suppress-default.txt
+
+Error #1: UNADDRESSABLE ACCESS beyond top of stack: reading 0x000000000063fb20-0x000000000063fb28 8 byte(s)
+# 0 ___chkstk_ms                            [../../../../../src/gcc-8.1.0/libgcc/config/i386/cygwin.S:132]
+# 1 _pei386_runtime_relocator               [D:/BachKhoa/HK2/Discrete Structure for Computer Science/BTL/Sub1/PreFixInFixCalculator/file.cpp:136]
+# 2 __tmainCRTStartup
+# 3 .l_start
+# 4 ntdll.dll!RtlUserThreadStart
+Note: @0:00:00.107 in thread 8312
+Note: 0x000000000063fb20 refers to 632 byte(s) beyond the top of the stack 0x000000000063fd98
+Note: instruction: or     $0x0000000000000000 (%rcx) -> (%rcx)
+
+Error #2: UNADDRESSABLE ACCESS beyond top of stack: reading 0x000000000063eba0-0x000000000063eba8 8 byte(s)
+# 0 ___chkstk_ms                            [../../../../../src/gcc-8.1.0/libgcc/config/i386/cygwin.S:126]
+# 1 __gnu_cxx::__to_xstring<>               [D:/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/ext/string_conversions.h:105]
+# 2 std::__cxx11::to_string                 [D:/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/basic_string.h:6471]
+# 3 PostfixPrefixCalculator                 [D:/BachKhoa/HK2/Discrete Structure for Computer Science/BTL/Sub1/PreFixInFixCalculator/file.cpp:114]
+# 4 main                                    [D:/BachKhoa/HK2/Discrete Structure for Computer Science/BTL/Sub1/PreFixInFixCalculator/file.cpp:134]
+Note: @0:00:00.382 in thread 8312
+Note: 0x000000000063eba0 refers to 4072 byte(s) beyond the top of the stack 0x000000000063fb88
+Note: instruction: or     $0x0000000000000000 (%rcx) -> (%rcx)
+
+Error #3: UNADDRESSABLE ACCESS beyond top of stack: reading 0x000000000063e840-0x000000000063e848 8 byte(s)
+# 0 ___chkstk_ms                            [../../../../../src/gcc-8.1.0/libgcc/config/i386/cygwin.S:132]
+# 1 __gnu_cxx::__to_xstring<>               [D:/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/ext/string_conversions.h:105]
+# 2 std::__cxx11::to_string                 [D:/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/basic_string.h:6471]
+# 3 PostfixPrefixCalculator                 [D:/BachKhoa/HK2/Discrete Structure for Computer Science/BTL/Sub1/PreFixInFixCalculator/file.cpp:114]
+# 4 main                                    [D:/BachKhoa/HK2/Discrete Structure for Computer Science/BTL/Sub1/PreFixInFixCalculator/file.cpp:134]
+Note: @0:00:00.384 in thread 8312
+Note: 0x000000000063e840 refers to 4936 byte(s) beyond the top of the stack 0x000000000063fb88
+Note: instruction: or     $0x0000000000000000 (%rcx) -> (%rcx)
+
+Error #4: POSSIBLE LEAK 160 direct bytes 0x00000000036001c0-0x0000000003600260 + 0 indirect bytes
+# 0 replace_malloc                   [d:\a\drmemory\drmemory\common\alloc_replace.c:2580]
+# 1 msvcrt.dll!realloc              +0x17a    (0x00007ff972f1c93b <msvcrt.dll+0x1c93b>)
+# 2 msvcrt.dll!unlock               +0x40c    (0x00007ff972f3e6ed <msvcrt.dll+0x3e6ed>)
+# 3 msvcrt.dll!_getmainargs         +0x30     (0x00007ff972f07ca1 <msvcrt.dll+0x7ca1>)
+# 4 pre_cpp_init
+# 5 msvcrt.dll!initterm             +0x2c     (0x00007ff972f3d54d <msvcrt.dll+0x3d54d>)
+# 6 __tmainCRTStartup
+# 7 .l_start
+# 8 ntdll.dll!RtlUserThreadStart
+
+===========================================================================
+FINAL SUMMARY:
+
+DUPLICATE ERROR COUNTS:
+	Error #   1:      2
+	Error #   2:      2
+	Error #   3:      2
+
+SUPPRESSIONS USED:
+
+ERRORS FOUND:
+      3 unique,     6 total unaddressable access(es)
+      0 unique,     0 total uninitialized access(es)
+      0 unique,     0 total invalid heap argument(s)
+      0 unique,     0 total GDI usage error(s)
+      0 unique,     0 total handle leak(s)
+      0 unique,     0 total warning(s)
+      0 unique,     0 total,      0 byte(s) of leak(s)
+      1 unique,     1 total,    160 byte(s) of possible leak(s)
+ERRORS IGNORED:
+      2 potential error(s) (suspected false positives)
+         (details: D:\\drmemory\logs\DrMemory-file.exe.2920.000\potential_errors.txt)
+      6 unique,    10 total,    963 byte(s) of still-reachable allocation(s)
+         (re-run with "-show_reachable" for details)
+Details: D:\\drmemory\logs\DrMemory-file.exe.2920.000\results.txt
